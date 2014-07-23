@@ -99,7 +99,9 @@ backend nodejs_app_servers
   option forwardfor
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:nodejs_backends].each do |backend| -%>
-  server <%= backend['name'] %> <%= backend['ip'] %>:<%= node[:haproxy][backend['name']] || '80' %> weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app] %> check inter <%= node[:haproxy][:check_interval] %>
+    <% node[:haproxy][:nodejs_applications].each do |app_name, app_config| -%>
+      server <%= backend['name'] %> <%= backend['ip'] %>:<%= node[:haproxy][app_name] || '80' %> weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app] %> check inter <%= node[:haproxy][:check_interval] %>
+    <% end -%>
   <% end -%>
 <% end -%>
 
@@ -110,7 +112,9 @@ backend nodejs_app_servers_ssl
   option forwardfor
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
   <% node[:haproxy][:nodejs_backends].each do |backend| -%>
-  server <%= backend['name'] %> <%= backend['ip'] %>:<%= node[:haproxy][backend['name']] || '80' %> weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app_ssl] %> check inter <%= node[:haproxy][:check_interval] %>
+    <% node[:haproxy][:nodejs_applications].each do |app_name, app_config| -%>
+      server <%= backend['name'] %> <%= backend['ip'] %>:<%= node[:haproxy][app_name] || '80' %> weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app_ssl] %> check inter <%= node[:haproxy][:check_interval] %>
+    <% end -%>
   <% end -%>
 <% end -%>
 
