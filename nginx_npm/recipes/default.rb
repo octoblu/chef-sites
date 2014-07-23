@@ -13,7 +13,7 @@ node[:deploy].each do |application, deploy|
     user "root"
     cwd "/tmp"
     code <<-EOH
-      sudo su - #{deploy[:user]} -c 'cd #{deploy[:deploy_to]}/current && npm install' 2>&1
+      sudo su - #{deploy[:user]} -c 'if [ -f #{deploy[:deploy_to]}/current ]; then cd #{deploy[:deploy_to]}/current && npm install; fi' 2>&1
     EOH
   end
 end
