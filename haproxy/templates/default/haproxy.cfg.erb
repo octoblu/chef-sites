@@ -192,11 +192,6 @@ frontend http-in
       <% if app_config['mounted_at'] -%>
   acl nodejs_application_<%= app_name %>_domain_<%= domain.gsub(/[^\w.:-]/, '_') %>_path path_beg <%= app_config['mounted_at'] %>
       <% end -%>
-
-      acl nodejs_application_<%= app_name %>_domain_<%= domain.gsub(/[^\w.:-]/, '_') %> path_beg /api
-      acl nodejs_application_<%= app_name %>_domain_<%= domain.gsub(/[^\w.:-]/, '_') %> path_beg /auth
-      acl nodejs_application_<%= app_name %>_domain_<%= domain.gsub(/[^\w.:-]/, '_') %> path_beg /connect
-      acl nodejs_application_<%= app_name %>_domain_<%= domain.gsub(/[^\w.:-]/, '_') %> path_beg /unlink
     <% end -%>
   <% end -%>
 
