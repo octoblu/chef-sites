@@ -1,5 +1,5 @@
 check host node_web_app_<%= @application_name %> with address 127.0.0.1
-  <% if @application_name == 'weather_service' %>
+  <% if @deploy[:coffee] %>
   start program = "/bin/sh -c 'cd <%= @deploy[:deploy_to] %>/current; /usr/bin/env NODE_PATH=<%= @deploy[:deploy_to] %>/current/node_modules:<%= @deploy[:deploy_to] %>/current <% (node[:environment_variables] || {}).merge(@deploy[:environment_variables] || {}).each do |name,value| -%><%= name %>=<%= value %> <% end -%> /usr/local/bin/npm start >> log/server.log'"
   stop program  = "/usr/bin/pkill -f 'coffee'"
   <% else %>
