@@ -1,0 +1,38 @@
+server {
+  listen   80;
+  server_name  <%= @application[:domains].join(" ") %> <%= node[:hostname] %>;
+  access_log  <%= node[:nginx][:log_dir] %>/<%= @application[:domains].first %>.access.log;
+  add_header Access-Control-Allow-Origin *;
+
+  if ($http_x_forwarded_proto = 'http') {
+    return 301 https://$server_name$request_uri;
+  }
+
+  location ~* /(angular|assets|lib|pages) {
+    root   <%= @application[:absolute_document_root] %>;
+    try_files $uri =404;
+  }
+
+  location / {
+    root   <%= @application[:absolute_document_root] %>;
+    try_files $uri /index.html;
+  }
+
+  # Block all svn access
+  if ($request_uri ~* ^.*\.svn.*$) {
+     return 404;
+  }
+
+  # Block all git access
+  if ($request_uri ~* ^.*\.git.*$) {
+     return 404;
+  }
+
+  location /nginx_status {
+    stub_status on;
+    access_log off;
+    allow 127.0.0.1;
+    deny all;
+  }
+
+}
