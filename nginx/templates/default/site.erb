@@ -15,7 +15,7 @@ server {
 
   location / {
     root   <%= @application[:absolute_document_root] %>;
-    try_files $uri /index.html;
+    try_files $uri $uri/index.html;
   }
 
   # Block all svn access
