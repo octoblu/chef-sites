@@ -41,13 +41,13 @@ defaults
 
 # Set up application listeners here.
 <% if !node[:haproxy][:nodejs_backends].empty? -%>
-  <% node[:haproxy][:nodejs_backends].each do |backend| -%>
-    <% node[:haproxy][:nodejs_applications].each do |app_name, app_config| -%>
+  <% node[:haproxy][:nodejs_applications].each do |app_name, app_config| -%>
 backend nodejs_app_<%= app_name %>_servers
   balance <%= node[:haproxy][:balance] %>
   option redispatch
   option forwardfor
   option httpchk <%= node[:haproxy][:health_check_method] %> <%= node[:haproxy][:health_check_url] %>
+  <% node[:haproxy][:nodejs_backends].each do |backend| -%>
   server <%= backend['name'] %> <%= backend['ip'] %>:<%= node[:haproxy][app_name] || '80' %> weight <%= backend['backends'] || 10 %> maxconn <%= backend['backends'] * node[:haproxy][:maxcon_factor_nodejs_app] %> check inter <%= node[:haproxy][:check_interval] %>
     <% end -%>
   <% end -%>
